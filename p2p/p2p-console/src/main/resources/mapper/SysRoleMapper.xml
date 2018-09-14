@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lx.p2p.console.mapper.SysRoleMapper">
+
+  <resultMap id="BaseResultMap" type="SysRole">
+    <id column="ROLE_ID" jdbcType="INTEGER" property="roleId" />
+    <result column="ROLE_NAME" jdbcType="VARCHAR" property="roleName" />
+    <result column="DESCRIPTION" jdbcType="VARCHAR" property="description" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    ROLE_ID, ROLE_NAME, DESCRIPTION, CREATE_TIME
+  </sql>
+
+  <!--根据用户id查找其角色-->
+  <select id="findRolesByUserId" resultMap="BaseResultMap">
+    select
+     r.ROLE_ID, r.ROLE_NAME, r.DESCRIPTION, r.CREATE_TIME
+    from t_sys_role r JOIN t_sys_user_role ur ON r.ROLE_ID = ur.ROLE_ID
+    JOIN  t_sys_user u ON ur.USER_ID = u.USER_ID
+    where u.USER_ID = #{userId}
+  </select>
+  
+</mapper>

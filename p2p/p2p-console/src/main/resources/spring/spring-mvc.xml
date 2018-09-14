@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+	<!-- 组件扫描，只扫描controller包下的以@Controller注解的组件 -->
+	<context:component-scan base-package="com.lx.p2p.console.controller"></context:component-scan>
+
+	<!-- 启动springmvc注解 -->
+	<mvc:annotation-driven>
+		<!-- 信息转换 -->
+		<mvc:message-converters>
+			<!-- 将请求String类型参数进行utf-8转码 -->
+			<bean id="stringHttpMessageConverter"
+				class="org.springframework.http.converter.StringHttpMessageConverter">
+				<property name="defaultCharset" value="utf-8"></property>
+			</bean>
+			<!-- 一般用于上传的时候 -->
+			<bean id="byteArrayHttpMessageConverter"
+				class="org.springframework.http.converter.ByteArrayHttpMessageConverter"></bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+
+	<!-- 允许访问静态资源，比如js、css -->
+	<mvc:default-servlet-handler />
+
+	<!-- 视图转发视图解析器 -->
+	<bean
+		class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+		<property name="viewResolvers">
+			<list>
+				<!-- jsp视图解析器，一般是html/jsp -->
+				<bean
+					class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+					<property name="viewClass"
+						value="org.springframework.web.servlet.view.JstlView" />
+					<!-- 前缀 -->
+					<property name="prefix" value="/WEB-INF/jsp/" />
+					<!-- 后缀 -->
+					<property name="suffix" value=".jsp" />
+					<!-- /WEB-INF/jsp/视图名.jsp -->
+				</bean>
+			</list>
+		</property>
+		<!-- 默认视图 -->
+		<property name="defaultViews">
+			<list>
+				<!-- json视图 -->
+				<bean
+					class="org.springframework.web.servlet.view.json.MappingJackson2JsonView" />
+				<!-- xml视图解析器，需要增加相应的依赖spring-oxm，并且需要返回的xml对象需要在下面的扫描中添加 -->
+				<bean class="org.springframework.web.servlet.view.xml.MarshallingView">
+					<constructor-arg>
+						<bean class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
+							<!-- 指定将哪个包下的对象转为xml输出 -->
+							<property name="packagesToScan">
+								<list>
+									<value>com.lx.p2p.console.entity</value>
+								</list>
+							</property>
+						</bean>
+					</constructor-arg>
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<!-- 文件上传解析器 -->
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- 设置默认字符编码 -->
+		<property name="defaultEncoding" value="utf-8"></property>
+		<!-- 设置最大上传文件大小（byte单位） -->
+		<property name="maxUploadSize" value="3000000" />
+	</bean>
+
+	<!-- 异常解析器 -->
+	<!-- <bean id="simpleMappingExceptionResolver"
+		class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+		默认错误代码
+		<property name="defaultStatusCode" value="500"></property>
+		默认错误页面
+		<property name="defaultErrorView" value="error/500"></property>
+		定义需要特殊处理的异常，用类名或完全路径名作为key，异常页面名作为值
+		<property name="exceptionMappings">
+			<props>
+				指定异常处理页面
+				<prop key="com.lx.p2p.console.exception.BussinessException">error/bussinessError</prop>
+				<prop key="java.lang.NullPointerException">error/500</prop>
+			</props>
+		</property>
+	</bean> -->
+
+	<!-- 自定义异常解析器 -->
+	<!-- <bean id="exceptionResolver" class="com.qhcs.springmvc.exception.ExceptionResolver"></bean> -->
+
+	<!-- 拦截器 -->
+	<!-- <mvc:interceptors> -->
+	<!-- <mvc:interceptor> -->
+	<!-- 拦截的地址,比如/user、/user/account -->
+	<!-- <mvc:mapping path="/**" /> -->
+	<!-- 不拦截的地址 -->
+	<!-- <mvc:exclude-mapping path="/" /> -->
+	<!-- <mvc:exclude-mapping path="/index" /> -->
+	<!-- <mvc:exclude-mapping path="/user/login" /> -->
+	<!-- <mvc:exclude-mapping path="/user/goLogin" /> -->
+	<!-- <mvc:exclude-mapping path="/user/logout" /> -->
+	<!-- <mvc:exclude-mapping path="/user/register" /> -->
+	<!-- <mvc:exclude-mapping path="/user/goRegister" /> -->
+	<!-- 登陆拦截处理的类 -->
+	<!-- <bean class="com.qhcs.springmvc.interceptor.LoginInterceptor"></bean> -->
+	<!-- </mvc:interceptor> -->
+	<!-- </mvc:interceptors> -->
+	
+	<!-- AOP式方法级权限检查，一定要先加载它，不然shiro注解无效 -->
+    <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" depends-on="lifecycleBeanPostProcessor">
+        <property name="proxyTargetClass" value="true" />
+    </bean>
+    <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+        <property name="securityManager" ref="securityManager"/>
+    </bean>
+
+</beans>

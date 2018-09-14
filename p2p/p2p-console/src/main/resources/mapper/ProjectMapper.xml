@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lx.p2p.console.mapper.ProjectMapper">
+	<resultMap id="BaseResultMap" type="com.lx.p2p.console.entity.Project">
+		<id column="project_id" jdbcType="INTEGER" property="projectId" />
+		<result column="title" jdbcType="VARCHAR" property="title" />
+		<result column="borrowing_amount" jdbcType="DOUBLE" property="borrowingAmount" />
+		<result column="year_rate" jdbcType="REAL" property="yearRate" />
+		<result column="loan_life" jdbcType="INTEGER" property="loanLife" />
+		<result column="return_type" jdbcType="VARCHAR" property="returnType" />
+		<result column="loan_schedule" jdbcType="INTEGER" property="loanSchedule" />
+		<result column="status" jdbcType="VARCHAR" property="status" />
+		<result column="user_id" jdbcType="INTEGER" property="userId" />
+		<result column="investment_type" jdbcType="VARCHAR" property="investmentType" />
+		<result column="risk_id" jdbcType="INTEGER" property="riskId" />
+		<result column="loan_application_management_id" jdbcType="INTEGER"
+			property="loanApplicationManagementId" />
+		<result column="release_date" jdbcType="TIMESTAMP" property="releaseDate" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		project_id, title, borrowing_amount, year_rate, loan_life, return_type,
+		loan_schedule,
+		status, user_id, investment_type, risk_id, loan_application_management_id,
+		release_date
+	</sql>
+
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_project
+		where project_id = #{projectId,jdbcType=INTEGER}
+	</select>
+
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from t_project
+		where project_id = #{projectId,jdbcType=INTEGER}
+	</delete>
+
+	<insert id="insert" parameterType="com.lx.p2p.console.entity.Project">
+		insert into t_project (project_id, title, borrowing_amount,
+		year_rate, loan_life, return_type,
+		loan_schedule, status, user_id,
+		investment_type, risk_id, loan_application_management_id,
+		release_date)
+		values (#{projectId,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR},
+		#{borrowingAmount,jdbcType=DOUBLE},
+		#{yearRate,jdbcType=REAL}, #{loanLife,jdbcType=INTEGER}, #{returnType,jdbcType=VARCHAR},
+		#{loanSchedule,jdbcType=INTEGER}, #{status,jdbcType=VARCHAR},
+		#{userId,jdbcType=INTEGER},
+		#{investmentType,jdbcType=VARCHAR}, #{riskId,jdbcType=INTEGER},
+		#{loanApplicationManagementId,jdbcType=INTEGER},
+		#{releaseDate,jdbcType=TIMESTAMP})
+	</insert>
+
+	<insert id="insertSelective" parameterType="com.lx.p2p.console.entity.Project">
+		insert into t_project
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="projectId != null">
+				project_id,
+			</if>
+			<if test="title != null">
+				title,
+			</if>
+			<if test="borrowingAmount != null">
+				borrowing_amount,
+			</if>
+			<if test="yearRate != null">
+				year_rate,
+			</if>
+			<if test="loanLife != null">
+				loan_life,
+			</if>
+			<if test="returnType != null">
+				return_type,
+			</if>
+			<if test="loanSchedule != null">
+				loan_schedule,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="userId != null">
+				user_id,
+			</if>
+			<if test="investmentType != null">
+				investment_type,
+			</if>
+			<if test="riskId != null">
+				risk_id,
+			</if>
+			<if test="loanApplicationManagementId != null">
+				loan_application_management_id,
+			</if>
+			<if test="releaseDate != null">
+				release_date,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="projectId != null">
+				#{projectId,jdbcType=INTEGER},
+			</if>
+			<if test="title != null">
+				#{title,jdbcType=VARCHAR},
+			</if>
+			<if test="borrowingAmount != null">
+				#{borrowingAmount,jdbcType=DOUBLE},
+			</if>
+			<if test="yearRate != null">
+				#{yearRate,jdbcType=REAL},
+			</if>
+			<if test="loanLife != null">
+				#{loanLife,jdbcType=INTEGER},
+			</if>
+			<if test="returnType != null">
+				#{returnType,jdbcType=VARCHAR},
+			</if>
+			<if test="loanSchedule != null">
+				#{loanSchedule,jdbcType=INTEGER},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=VARCHAR},
+			</if>
+			<if test="userId != null">
+				#{userId,jdbcType=INTEGER},
+			</if>
+			<if test="investmentType != null">
+				#{investmentType,jdbcType=VARCHAR},
+			</if>
+			<if test="riskId != null">
+				#{riskId,jdbcType=INTEGER},
+			</if>
+			<if test="loanApplicationManagementId != null">
+				#{loanApplicationManagementId,jdbcType=INTEGER},
+			</if>
+			<if test="releaseDate != null">
+				#{releaseDate,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+
+	<update id="updateByPrimaryKeySelective" parameterType="com.lx.p2p.console.entity.Project">
+		update t_project
+		<set>
+			<if test="title != null">
+				title = #{title,jdbcType=VARCHAR},
+			</if>
+			<if test="borrowingAmount != null">
+				borrowing_amount = #{borrowingAmount,jdbcType=DOUBLE},
+			</if>
+			<if test="yearRate != null">
+				year_rate = #{yearRate,jdbcType=REAL},
+			</if>
+			<if test="loanLife != null">
+				loan_life = #{loanLife,jdbcType=INTEGER},
+			</if>
+			<if test="returnType != null">
+				return_type = #{returnType,jdbcType=VARCHAR},
+			</if>
+			<if test="loanSchedule != null">
+				loan_schedule = #{loanSchedule,jdbcType=INTEGER},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=VARCHAR},
+			</if>
+			<if test="userId != null">
+				user_id = #{userId,jdbcType=INTEGER},
+			</if>
+			<if test="investmentType != null">
+				investment_type = #{investmentType,jdbcType=VARCHAR},
+			</if>
+			<if test="riskId != null">
+				risk_id = #{riskId,jdbcType=INTEGER},
+			</if>
+			<if test="loanApplicationManagementId != null">
+				loan_application_management_id = #{loanApplicationManagementId,jdbcType=INTEGER},
+			</if>
+			<if test="releaseDate != null">
+				release_date = #{releaseDate,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where project_id = #{projectId,jdbcType=INTEGER}
+	</update>
+
+	<update id="updateByPrimaryKey" parameterType="com.lx.p2p.console.entity.Project">
+		update t_project
+		set title = #{title,jdbcType=VARCHAR},
+		borrowing_amount = #{borrowingAmount,jdbcType=DOUBLE},
+		year_rate = #{yearRate,jdbcType=REAL},
+		loan_life = #{loanLife,jdbcType=INTEGER},
+		return_type = #{returnType,jdbcType=VARCHAR},
+		loan_schedule = #{loanSchedule,jdbcType=INTEGER},
+		status = #{status,jdbcType=VARCHAR},
+		user_id = #{userId,jdbcType=INTEGER},
+		investment_type = #{investmentType,jdbcType=VARCHAR},
+		risk_id = #{riskId,jdbcType=INTEGER},
+		loan_application_management_id = #{loanApplicationManagementId,jdbcType=INTEGER},
+		release_date = #{releaseDate,jdbcType=TIMESTAMP}
+		where project_id = #{projectId,jdbcType=INTEGER}
+	</update>
+
+	<select id="getAllProject" parameterType="projectPage"
+		resultType="project">
+		select * from t_project
+		<where>
+			<if test="status != null and status != ''">
+				status = #{status}
+			</if>
+		</where>
+		order by release_date desc limit #{start}, #{size}
+	</select>
+
+	<select id="getProjectCount" parameterType="projectPage"
+		resultType="java.lang.Integer">
+		select count(0) from t_project
+		<where>
+			<if test="status != null and status != ''">
+				status = #{status}
+			</if>
+		</where>
+	</select>
+	
+	<select id="getProjectByIds" parameterType="java.lang.Integer" resultType="project">
+		select * from t_project
+		<where>
+			project_id in
+			<foreach collection="array" index="index" item="item" open="(" separator="," close=")">
+	            #{item}
+	        </foreach>
+		</where>
+	</select>
+	
+	<select id="getFullProjectDataList" parameterType="java.lang.Integer" resultType="java.util.Map">
+		SELECT
+			DATE_FORMAT(release_date, '%Y-%m-%d') releaseDate,
+			SUM(borrowing_amount) borrowAmount
+		FROM
+			t_project
+		WHERE
+			`status` = '满标'
+		<if test="type != 0">
+			AND release_date > DATE_SUB(NOW(), INTERVAL #{type} DAY) 
+		</if>
+		GROUP BY
+			DATE_FORMAT(release_date, '%Y-%m-%d')
+	</select>
+
+</mapper>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- 配置sqlSessionFactoryBean -->
+	<bean id="sqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<!-- 注入数据源 -->
+		<property name="dataSource" ref="dataSource"></property>
+		<!-- 设置mybatis配置文件地址 -->
+		<property name="configLocation" value="classpath:mybatis-config.xml"></property>
+		<!-- 设置mybatis映射文件地址 -->
+		<property name="mapperLocations" value="classpath:mapper/**/*.xml"></property>
+		<!-- 设置entity所在包路径，在映射文件parameterType、resultType可以使用类名而不需要类全路径 -->
+		<property name="typeAliasesPackage" value="com.lx.p2p.console.entity;com.lx.p2p.console.dto;com.lx.p2p.console.page"></property>
+	</bean>
+	
+	<!-- 设置dao扫描配置 -->
+	<bean id="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<!-- 设置dao包路径 -->
+		<property name="basePackage" value="com.lx.p2p.console.mapper"></property>
+		<!-- 注入sqlSessionFactoryBean，特别注意这里用value不能用ref -->
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactoryBean"></property>
+	</bean>
+
+</beans>

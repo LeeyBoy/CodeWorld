@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lx.p2p.console.mapper.SysFunctionMapper">
+
+  <resultMap id="BaseResultMap" type="SysFunction">
+    <id column="FUNCTION_ID" jdbcType="INTEGER" property="functionId" />
+    <result column="PARENT_ID" jdbcType="INTEGER" property="parentId" />
+    <result column="FUNCTION_NAME" jdbcType="VARCHAR" property="functionName" />
+    <result column="FUNCTION_URL" jdbcType="VARCHAR" property="functionUrl" />
+    <result column="FUNCTION_TYPE" jdbcType="BIT" property="functionType" />
+    <result column="PERMISSION" jdbcType="VARCHAR" property="permission" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="SORT" jdbcType="INTEGER" property="sort" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    FUNCTION_ID, PARENT_ID, FUNCTION_NAME, FUNCTION_URL, FUNCTION_TYPE, PERMISSION, CREATE_TIME,
+    SORT
+  </sql>
+
+  <!--根据用户id查找权限-->
+  <select id="findFunctionsByUserId" resultMap="BaseResultMap">
+    select
+    f.FUNCTION_ID, f.PARENT_ID, f.FUNCTION_NAME, f.FUNCTION_URL, f.FUNCTION_TYPE, f.PERMISSION,
+    f.CREATE_TIME, f.SORT
+    from t_sys_function f JOIN t_sys_role_function rf ON  f.FUNCTION_ID = rf.FUNCTION_ID
+    JOIN t_sys_user_role ur ON ur.ROLE_ID = rf.ROLE_ID
+    JOIN t_sys_user u ON u.USER_ID = ur.USER_ID
+    where u.USER_ID = #{userId}
+  </select>
+
+</mapper>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lx.p2p.console.mapper.SysUserMapper">
+
+  <resultMap id="BaseResultMap" type="SysUser">
+    <id column="USER_ID" jdbcType="INTEGER" property="userId" />
+    <result column="USER_NAME" jdbcType="VARCHAR" property="userName" />
+    <result column="PASSWORD" jdbcType="VARCHAR" property="password" />
+    <result column="REAL_NAME" jdbcType="VARCHAR" property="realName" />
+    <result column="STATUS" jdbcType="INTEGER" property="status" />
+    <result column="LAST_LOGIN_TIME" jdbcType="TIMESTAMP" property="lastLoginTime" />
+    <result column="LAST_LOGIN_IP" jdbcType="VARCHAR" property="lastLoginIp" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="EMAIL" jdbcType="VARCHAR" property="email" />
+    <result column="TEL" jdbcType="VARCHAR" property="tel" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    USER_ID, USER_NAME, PASSWORD, REAL_NAME, STATUS, LAST_LOGIN_TIME, LAST_LOGIN_IP,
+    CREATE_TIME, EMAIL, TEL
+  </sql>
+
+  <!--根据用户名查找用户-->
+  <select id="findSysUserByName" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_sys_user
+    where USER_NAME = #{userName}
+  </select>
+  
+</mapper>
